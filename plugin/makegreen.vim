@@ -22,20 +22,19 @@ hi RedBar   term=reverse ctermfg=white ctermbg=darkred guifg=white guibg=darkred
 
 function MakeGreen(...) "{{{1
   let arg_count = a:0
-  if arg_count
-    let make_args = a:1
+
+  if exists("g:makegreen_stay_on_file") && g:makegreen_stay_on_file
+    let make_command = "make!"
   else
-    let make_args = '%'
+    let make_command = "make"
   endif
 
-  silent! w
-  let s:old_sp = &shellpipe
-  if has('unix')
-    set shellpipe=&> "quieter make output
+  silent! w " TODO: configuration option?
+  if arg_count
+    silent! exec make_command . " " . a:1
+  else
+    silent! exec make_command
   endif
-  " TODO: configuration option? for make! or make
-  silent! exec "make! " . make_args
-  let &shellpipe = s:old_sp
 
   redraw!
 
@@ -78,13 +77,7 @@ function s:Bar(type, msg)
   echohl None
 endfunction
 
-" }}}1
-" Mappings" {{{1
-
-if !hasmapto('MakeGreen')
-  map <unique> <silent> <Leader>t :call MakeGreen()<cr>
-endif
-" }}}1
+:command -nargs=* MakeGreen :call MakeGreen(<q-args>)
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
