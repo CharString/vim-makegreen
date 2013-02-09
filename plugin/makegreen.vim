@@ -82,5 +82,5 @@ endfunction
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-autocmd QuickFixCmdPost * nested cwindow | cfirst | cclose
+"autocmd QuickFixCmdPost * nested cwindow | cfirst | cclose
 " vim:set sw=2 sts=2:
